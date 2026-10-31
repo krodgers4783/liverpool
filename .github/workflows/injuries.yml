@@ -1,0 +1,37 @@
+name: Update injuries
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get Liverpool injuries from Fantasy Premier League
+        run: |
+          python3 - <<'PY'
+          import json, urllib.request, datetime
+          req = urllib.request.Request("https://fantasy.premierleague.com/api/bootstrap-static/", headers={"User-Agent": "Mozilla/5.0"})
+          d = json.load(urllib.request.urlopen(req, timeout=60))
+          team = next(t for t in d["teams"] if t["short_name"] == "LIV")
+          pos = {e["id"]: e["singular_name_short"] for e in d["element_types"]}
+          out = []
+          for p in d["elements"]:
+              if p["team"] == team["id"] and p["status"] in ("i", "s", "d"):
+                  out.append({"name": p["first_name"] + " " + p["second_name"], "short": p["web_name"],
+                              "pos": pos.get(p["element_type"], ""), "status": p["status"], "news": p["news"],
+                              "chance": p["chance_of_playing_next_round"], "since": p["news_added"]})
+          out.sort(key=lambda x: "isd".index(x["status"]))
+          now = datetime.datetime.now(datetime.timezone.utc).isoformat()
+          json.dump({"updated": now, "players": out}, open("injuries.json", "w"), indent=1)
+          PY
+      - name: Save
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add injuries.json
+          git commit -m "Update injuries" || exit 0
+          git push
