@@ -1,0 +1,68 @@
+{
+ "updated": "2026-10-31T14:45:33.385020+00:00",
+ "players": [
+  {
+   "name": "Vitezslav Jaros",
+   "short": "Jaros",
+   "pos": "GKP",
+   "status": "i",
+   "news": "Knee injury - Unknown return date",
+   "chance": 0,
+   "since": "2026-07-29T18:00:10.351066Z"
+  },
+  {
+   "name": "Jeremie Frimpong",
+   "short": "Frimpong",
+   "pos": "DEF",
+   "status": "i",
+   "news": "Hamstring injury - Unknown return date",
+   "chance": 0,
+   "since": "2026-10-17T15:30:09.979166Z"
+  },
+  {
+   "name": "Conor Bradley",
+   "short": "Bradley",
+   "pos": "DEF",
+   "status": "i",
+   "news": "Knee injury - Unknown return date",
+   "chance": 0,
+   "since": "2026-07-23T12:01:23.565711Z"
+  },
+  {
+   "name": "Giovanni Leoni",
+   "short": "Leoni",
+   "pos": "DEF",
+   "status": "i",
+   "news": "Knee injury - Unknown return date",
+   "chance": 0,
+   "since": "2026-07-23T12:01:23.596909Z"
+  },
+  {
+   "name": "Hugo Ekitik\u00e9",
+   "short": "Ekitik\u00e9",
+   "pos": "FWD",
+   "status": "i",
+   "news": "Achilles injury - Unknown return date",
+   "chance": 0,
+   "since": "2026-07-23T12:01:23.643771Z"
+  },
+  {
+   "name": "Dominik Szoboszlai",
+   "short": "Szoboszlai",
+   "pos": "MID",
+   "status": "d",
+   "news": "Hamstring injury - 50% chance of playing",
+   "chance": 50,
+   "since": "2026-10-17T15:00:08.293301Z"
+  },
+  {
+   "name": "Victor Munoz",
+   "short": "Munoz",
+   "pos": "MID",
+   "status": "d",
+   "news": "Knee injury - 50% chance of playing",
+   "chance": 50,
+   "since": "2026-10-20T18:30:09.999223Z"
+  }
+ ]
+}
