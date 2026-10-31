@@ -106,6 +106,23 @@ button:focus-visible, a:focus-visible { outline: 2px solid #fff; outline-offset:
 .tbl tr.me td:first-child { box-shadow: inset 4px 0 0 var(--orange); color: #fff; }
 .tbl tr.gap td { text-align: center !important; color: var(--muted); padding: 2px; border: 0; }
 .more { margin-top: 10px; background: none !important; color: var(--orange) !important; border: 1px solid rgba(246,235,97,.6) !important; width: 100%; }
+.inj { display: flex; flex-direction: column; gap: 0; }
+.inj-row { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,.1); }
+.inj-row:first-child { border-top: 0; padding-top: 0; }
+.inj-name { font-weight: 600; min-width: 0; }
+.inj-name small { color: var(--muted); font-weight: 500; margin-left: 6px; font-size: 12px; letter-spacing: .06em; }
+.inj-what { grid-column: 1; color: var(--muted); font-size: 14px; }
+.inj-back { grid-column: 2; grid-row: 2; text-align: right; font-size: 14px; color: #fff; white-space: nowrap; }
+.tag { grid-column: 2; grid-row: 1; justify-self: end; font: 800 12px var(--display); letter-spacing: .1em; text-transform: uppercase; padding: 2px 8px; border-radius: 6px; }
+.tag.out { background: var(--loss); color: #3a0a05; }
+.tag.doubt { background: var(--orange); color: #4a2a00; }
+.tag.ban { background: #fff; color: #7a0a1c; }
+.subhead { font: 700 12px var(--display); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 16px 0 6px; }
+.news a { display: block; text-decoration: none; color: var(--ink); padding: 9px 0; border-top: 1px solid rgba(255,255,255,.1); }
+.news a:first-child { border-top: 0; }
+.news a p { margin: 3px 0 0; color: var(--muted); font-size: 14px; line-height: 1.35; }
+.news a .kind { display: inline-block; font: 800 11px var(--display); letter-spacing: .1em; text-transform: uppercase; background: var(--orange); color: #4a2a00; padding: 1px 6px; border-radius: 4px; margin-right: 6px; vertical-align: 2px; }
+.news a small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
 .stamp { text-align: center; font-size: 12px; color: var(--muted); }
 </style>
 </head>
@@ -134,6 +151,16 @@ button:focus-visible, a:focus-visible { outline: 2px solid #fff; outline-offset:
   <section class="panel">
     <div class="label">Next match</div>
     <div id="nextBody" class="dim">Loading…</div>
+  </section>
+
+  <section class="panel">
+    <div class="label">Injuries &amp; suspensions</div>
+    <div id="injBody" class="dim">Loading…</div>
+  </section>
+
+  <section class="panel">
+    <div class="label">Squad news</div>
+    <div id="squadBody" class="dim">Loading…</div>
   </section>
 
   <div class="stamp" id="stamp"></div>
@@ -391,6 +418,84 @@ function renderTable(j) {
   document.getElementById("tableToggle").onclick = () => { tableOpen = !tableOpen; renderTable(j); };
 }
 
+// Squad news: injuries (copied into this repository from Fantasy Premier League by a GitHub job) + ESPN headlines
+const GH_USER = location.hostname.endsWith(".github.io") ? location.hostname.split(".")[0] : "krodgers4783";
+const GH_REPO = (location.hostname.endsWith(".github.io") && location.pathname.split("/").filter(Boolean)[0]) || "liverpool";
+async function getInjuries() {
+  const r = await fetch(`https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/main/injuries.json?_=${Date.now()}`, { cache: "no-store" });
+  if (!r.ok) throw new Error("HTTP " + r.status);
+  return r.json();
+}
+function returnOf(p) {
+  const n = p.news || "";
+  let m = n.match(/expected back\s+(\d{1,2}\s+[A-Za-z]{3})/i);
+  if (m) return "Back ~" + m[1];
+  m = n.match(/until\s+(\d{1,2}\s+[A-Za-z]{3})/i);
+  if (m) return "Until " + m[1];
+  if (/unknown return/i.test(n)) return "Return unknown";
+  if (p.status === "d" && p.chance != null) return p.chance + "% to play";
+  return "Return date not given";
+}
+function whatOf(p) {
+  // FPL notes look like "Hamstring injury - Expected back 22 Nov"; keep the first part
+  if (p.status === "s") return "Suspended";
+  const first = (p.news || "").split(/\s+-\s+/)[0].trim();
+  return first || (p.status === "s" ? "Suspended" : "Injury");
+}
+const ago = iso => {
+  const h = Math.round((Date.now() - new Date(iso)) / 36e5);
+  if (!isFinite(h)) return "";
+  return h < 1 ? "just now" : h < 24 ? h + "h ago" : Math.round(h / 24) + "d ago";
+};
+function renderInjuries(inj) {
+  const body = document.getElementById("injBody");
+  body.classList.remove("dim");
+  if (!inj || !Array.isArray(inj.players)) {
+    body.innerHTML = `<div class="dim">The injury list isn't switched on yet. It appears once the GitHub "Update injuries" job has run.</div>`;
+    return;
+  }
+  let html = "";
+  if (!inj.players.length) html += `<div class="dim">No injuries or suspensions listed. Full squad available.</div>`;
+  else html += `<div class="inj">` + inj.players.map(p => {
+    const tag = p.status === "i" ? `<span class="tag out">Out</span>` : p.status === "s" ? `<span class="tag ban">Banned</span>` : `<span class="tag doubt">Doubtful</span>`;
+    return `<div class="inj-row"><div class="inj-name">${esc(p.name)}<small>${esc(p.pos)}</small></div>${tag}<div class="inj-what">${esc(whatOf(p))}</div><div class="inj-back">${esc(returnOf(p))}</div></div>`;
+  }).join("") + `</div>`;
+  html += `<div class="note">From Fantasy Premier League, updated ${esc(ago(inj.updated))}. Return dates are estimates.</div>`;
+  body.innerHTML = html;
+}
+
+// Transfer-type stories get a small tag so they stand out
+const KIND = [
+  [/transfer|sign(s|ed|ing)?\b|loan|bid|deal|fee|target|move for|swoop|contract|extension|depart|exit/i, "Transfer"],
+  [/injur|fitness|ruled out|return(s|ing)? from|scan|knock/i, "Fitness"],
+  [/manager|boss|coach|press conference|says/i, "Club"]
+];
+function renderNews(news) {
+  const body = document.getElementById("squadBody");
+  body.classList.remove("dim");
+  if (!news || !news.length) { body.innerHTML = `<div class="dim">No Liverpool headlines right now.</div>`; return; }
+  body.innerHTML = `<div class="news">` + news.slice(0, 6).map(a => {
+    const text = (a.headline || "") + " " + (a.description || "");
+    const k = KIND.find(([re]) => re.test(text));
+    return `<a href="${esc(a.links?.web?.href || "https://www.espn.com/soccer/team/_/id/364/liverpool")}" target="_blank" rel="noopener">
+      ${k ? `<span class="kind">${k[1]}</span>` : ""}${esc(a.headline)}
+      ${a.description ? `<p>${esc(a.description)}</p>` : ""}
+      <small>${esc(ago(a.published))}</small></a>`;
+  }).join("") + `</div>`;
+}
+async function loadSquad() {
+  const [injR, newsR] = await Promise.allSettled([
+    getInjuries(),
+    getJSON(`${BASE}/eng.1/news?team=${TEAM_ID}&limit=30`)
+  ]);
+  let articles = newsR.status === "fulfilled" ? (newsR.value.articles || []) : [];
+  const aboutLFC = a => (a.categories || []).some(c => String(c.teamId ?? c.team?.id) === TEAM_ID) || /liverpool/i.test(a.headline || "");
+  articles = articles.filter(aboutLFC);
+  const fail = id => { const el = document.getElementById(id); el.classList.add("dim"); el.textContent = "Couldn't load this right now. Tap Refresh."; };
+  try { renderInjuries(injR.status === "fulfilled" ? injR.value : null); } catch (e) { fail("injBody"); }
+  try { renderNews(articles); } catch (e) { fail("squadBody"); }
+}
+
 async function load() {
   clearTimeout(liveTimer);
   const btn = document.getElementById("refresh");
@@ -437,6 +542,7 @@ async function load() {
     safe("nextBody", () => renderNext(next));
     const tableR = await Promise.allSettled([tableJob]).then(r => r[0]);
     safe("tableBody", () => renderTable(tableR.status === "fulfilled" ? tableR.value : null));
+    await loadSquad();
 
     document.getElementById("stamp").textContent = "Updated " + new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }) + (live ? " · refreshing every 30s" : "");
     if (live) liveTimer = setTimeout(load, 30000);
