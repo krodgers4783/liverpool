@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-01T13:36:46.947752+00:00",
+ "updated": "2026-11-01T22:06:36.594894+00:00",
  "players": [
   {
    "name": "Vitezslav Jaros",
@@ -45,24 +45,6 @@
    "news": "Achilles injury - Unknown return date",
    "chance": 0,
    "since": "2026-07-23T12:01:23.643771Z"
-  },
-  {
-   "name": "Dominik Szoboszlai",
-   "short": "Szoboszlai",
-   "pos": "MID",
-   "status": "d",
-   "news": "Hamstring injury - 50% chance of playing",
-   "chance": 50,
-   "since": "2026-10-17T15:00:08.293301Z"
-  },
-  {
-   "name": "Victor Munoz",
-   "short": "Munoz",
-   "pos": "MID",
-   "status": "d",
-   "news": "Knee injury - 50% chance of playing",
-   "chance": 50,
-   "since": "2026-10-20T18:30:09.999223Z"
   }
  ]
 }
