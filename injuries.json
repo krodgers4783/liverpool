@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-20T07:24:05.987355+00:00",
+ "updated": "2026-11-20T20:27:01.257758+00:00",
  "players": [
   {
    "name": "Vitezslav Jaros",
@@ -9,15 +9,6 @@
    "news": "Knee injury - Unknown return date",
    "chance": 0,
    "since": "2026-07-29T18:00:10.351066Z"
-  },
-  {
-   "name": "Jeremie Frimpong",
-   "short": "Frimpong",
-   "pos": "DEF",
-   "status": "i",
-   "news": "Hamstring injury - Unknown return date",
-   "chance": 0,
-   "since": "2026-10-17T15:30:09.979166Z"
   },
   {
    "name": "Conor Bradley",
@@ -47,13 +38,13 @@
    "since": "2026-07-23T12:01:23.643771Z"
   },
   {
-   "name": "Virgil van Dijk",
-   "short": "Virgil",
+   "name": "Jeremie Frimpong",
+   "short": "Frimpong",
    "pos": "DEF",
    "status": "d",
-   "news": "Unspecified injury - 75% chance of playing",
+   "news": "Hamstring injury - 75% chance of playing",
    "chance": 75,
-   "since": "2026-11-09T18:00:09.325472Z"
+   "since": "2026-10-17T15:30:09.979166Z"
   },
   {
    "name": "Ryan Gravenberch",
