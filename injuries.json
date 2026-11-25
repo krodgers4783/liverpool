@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-25T08:42:47.514478+00:00",
+ "updated": "2026-11-25T21:45:26.837052+00:00",
  "players": [
   {
    "name": "Vitezslav Jaros",
@@ -29,6 +29,24 @@
    "since": "2026-07-23T12:01:23.596909Z"
   },
   {
+   "name": "Cody Gakpo",
+   "short": "Gakpo",
+   "pos": "MID",
+   "status": "i",
+   "news": "Calf injury - Expected back 2 Dec",
+   "chance": 0,
+   "since": "2026-11-22T16:30:05.520808Z"
+  },
+  {
+   "name": "Ryan Gravenberch",
+   "short": "Gravenberch",
+   "pos": "MID",
+   "status": "i",
+   "news": "Foot injury - Unknown return date",
+   "chance": 0,
+   "since": "2026-11-03T17:00:09.626695Z"
+  },
+  {
    "name": "Hugo Ekitik\u00e9",
    "short": "Ekitik\u00e9",
    "pos": "FWD",
@@ -36,24 +54,6 @@
    "news": "Achilles injury - Unknown return date",
    "chance": 0,
    "since": "2026-07-23T12:01:23.643771Z"
-  },
-  {
-   "name": "Cody Gakpo",
-   "short": "Gakpo",
-   "pos": "MID",
-   "status": "d",
-   "news": "Calf injury - 75% chance of playing",
-   "chance": 75,
-   "since": "2026-11-22T16:30:05.520808Z"
-  },
-  {
-   "name": "Ryan Gravenberch",
-   "short": "Gravenberch",
-   "pos": "MID",
-   "status": "d",
-   "news": "Foot injury - 75% chance of playing",
-   "chance": 75,
-   "since": "2026-11-03T17:00:09.626695Z"
   }
  ]
 }
