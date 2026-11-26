@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-25T21:45:26.837052+00:00",
+ "updated": "2026-11-26T08:27:57.932550+00:00",
  "players": [
   {
    "name": "Vitezslav Jaros",
@@ -54,6 +54,15 @@
    "news": "Achilles injury - Unknown return date",
    "chance": 0,
    "since": "2026-07-23T12:01:23.643771Z"
+  },
+  {
+   "name": "Victor Munoz",
+   "short": "Munoz",
+   "pos": "MID",
+   "status": "d",
+   "news": "Knee injury - 75% chance of playing",
+   "chance": 75,
+   "since": "2026-11-26T03:30:05.640103Z"
   }
  ]
 }
